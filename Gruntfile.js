@@ -14,12 +14,18 @@ module.exports = function(grunt) {
 				files: "dist/css/**/*.css"
 			},
 			jade: {
-				files: ["src/*.jade"],
-				tasks: ["jade"]
+				files: ["src/*.jade", "cfg/jade*"],
+				tasks: ["jade"],
+				options: {
+					livereload: false
+				}
 			},
 			compass: {
-				files: ["src/sass/**/*.scss", "src/sass/**/*.sass"],
-				tasks: ["compass"]
+				files: ["src/sass/**/*.{scss,sass}"],
+				tasks: ["compass"],
+				options: {
+					livereload: false
+				}
 			}
 		},
 		jade: {
@@ -40,7 +46,7 @@ module.exports = function(grunt) {
 					sassDir: "src/sass",
 					imagesDir: "src/img",
 					cssDir: "dist/css",
-					debugInfo: false
+					environment: "production"
 				}
 			}
 		}

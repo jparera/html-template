@@ -24,6 +24,9 @@ module.exports = function(grunt) {
 		},
 		jade: {
 			dist: {
+				options: {
+					data: grunt.file.readJSON('cfg/jade-data.json')
+				},
 				expand: true,
 				cwd: "src",
 				src: "*.jade",		

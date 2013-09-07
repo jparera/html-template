@@ -1,8 +1,10 @@
 doctype 5
 html
 	head
-		title Static HTML project.
+		title= title
 		link(rel='stylesheet', href='css/style.css')
 	body
-		h1 Static HTML project.
+		h1= title
 		p Hello world!
+		each author in authors
+			p= author

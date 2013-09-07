@@ -2,9 +2,7 @@ doctype 5
 html
 	head
 		title= title
-		link(rel='stylesheet', href='css/style.css')
+		each stylesheet in stylesheets
+			link(rel='stylesheet', href=stylesheet.uri)
 	body
 		h1= title
-		p Hello world!
-		each author in authors
-			p= author

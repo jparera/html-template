@@ -1,4 +1,8 @@
 {
-	"title": "Static HTML Project",
-	"authors": ["Juan Parera", "Diana Kramer"]
+	"title": "Static HTML project",
+	"stylesheets": [
+		{
+			"uri": "css/style.css"
+		}
+	]
 }

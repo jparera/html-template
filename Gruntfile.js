@@ -1,63 +1,92 @@
 module.exports = function(grunt) {
-	var cfg = {
-		watch: {
-			options: {
-				livereload: true
+	var cfgDir = "cfg/",
+		srcDir = "src/",
+		outDir = "dist/",
+		cfg = {
+			watch: {
+				options: {
+					livereload: true
+				},
+				html: {
+					files: outDir + "*.html"
+				},
+				js: {
+					files: outDir + "js/**/*.js"
+				},
+				css: {
+					files: outDir + "css/**/*.css"
+				},
+				dstImages: {
+					files: outDir + "img/**/*.{png,jpg,gif}"
+				},
+				srcImages: {
+					files: srcDir + "img/**/*.{png,jpg,gif}",
+					tasks: ["copy:img"],
+					options: {
+						livereload: false
+					}
+				},
+				jade: {
+					files: [srcDir + "*.jade", cfgDir + "jade*"],
+					tasks: ["jade"],
+					options: {
+						livereload: false
+					}
+				},
+				compass: {
+					files: [srcDir + "sass/**/*.{scss,sass}"],
+					tasks: ["copy:sass", "compass"],
+					options: {
+						livereload: false
+					}
+				}
 			},
-			html: {	
-				files: "dist/*.html"
-			},
-			js: {
-				files: "dist/js/**/*.js"
-			},
-			css: {
-				files: "dist/css/**/*.css"
+			copy: {
+				img: {
+					expand: true,
+					cwd: srcDir,
+					src: "img/**/*.{png,jpg,gif}",
+					dest: outDir
+				},
+				sass: {
+					expand: true,
+					cwd: srcDir,
+					src: "sass/**/*.{scss,sass}",
+					dest: outDir
+				}
 			},
 			jade: {
-				files: ["src/*.jade", "cfg/jade*"],
-				tasks: ["jade"],
-				options: {
-					livereload: false
+				dist: {
+					options: {
+						data: grunt.file
+							.readJSON(cfgDir + "jade-data.json")
+					},
+					expand: true,
+					cwd: srcDir,
+					src: "*.jade",
+					dest: outDir,
+					ext: ".html"
 				}
 			},
 			compass: {
-				files: ["src/sass/**/*.{scss,sass}"],
-				tasks: ["compass"],
-				options: {
-					livereload: false
+				dist: {
+					options: {
+						cssDir: outDir + "css",
+						sassDir: outDir + "sass",
+						imagesDir: outDir + "img",
+						environment: "production"
+					}
 				}
 			}
-		},
-		jade: {
-			dist: {
-				options: {
-					data: grunt.file.readJSON('cfg/jade-data.json')
-				},
-				expand: true,
-				cwd: "src",
-				src: "*.jade",		
-				dest: 'dist/',
-				ext: ".html"
-			}
-		},
-		compass: {
-			dist: {
-				options: {
-					sassDir: "src/sass",
-					imagesDir: "src/img",
-					cssDir: "dist/css",
-					environment: "production"
-				}
-			}
-		}
-	};
+		};
 
 	grunt.initConfig(cfg);
 
+	grunt.loadNpmTasks("grunt-contrib-copy");
 	grunt.loadNpmTasks("grunt-contrib-jade");
 	grunt.loadNpmTasks("grunt-contrib-watch");
 	grunt.loadNpmTasks("grunt-contrib-compass");
 
-	grunt.registerTask("default", ["jade", "compass"]);
+	grunt.registerTask("default", ["copy", "jade", "compass"]);
 	grunt.registerTask("live", ["default", "watch"]);
 };
